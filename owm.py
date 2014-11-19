@@ -55,6 +55,17 @@ class OWM:
 			url = "%s/history/city?q=%s,%s&%s" % (self.weather_url, self.city, self.country, query_args)
 		return self.get_json_data(url)
 
+	# get current weather by city id
+	def get_weather_by_cityid(self, weather = 'current', city_id = 1520240, query_args = {}):
+		if weather == 'historical':
+			query_args['id'] = city_id
+		query_args = urllib.urlencode(query_args)
+		if weather == 'current':
+			url = "%s/weather?id=%s" % (self.weather_url, city_id)
+		elif weather == 'historical':
+			url = "%s/history/city?%s" % (self.weather_url, query_args)
+		return self.get_json_data(url)
+
 	# get weather data by geo coords
 	def get_current_weather_by_coords(self, lat = 35, lon = 139):
 		url = "%s/weather?lat=%s&lon=%s" % (self.weather_url, lat, lon)
@@ -66,7 +77,7 @@ class OWM:
 		return self.get_json_data(url)
 
 	# data from cities laid within definite circle that is specified by center point and radius
-	def get_current_weather_in_cycle(self, lat = 55.5, lon = 37.5, cnt = 10):
+	def get_current_weather_in_circle(self, lat = 55.5, lon = 37.5, cnt = 10):
 		url = "%s/weather?lat=%s&lon=%s&cnt=%s" % (self.weather_url, lat, lon, cnt)
 		return self.get_json_data(url)
 
@@ -84,5 +95,3 @@ class OWM:
 	def kelvin_to_celsius(self, temp):
 		c = round(temp - 273.15, 2)
 		return c
-
-
